@@ -1,0 +1,563 @@
+units:
+  # Parameters
+  capx: cx - 0.5  # Key cap size horizontal
+  capy: cy - 0.5  # Key cap size vertical
+  kx: cx          # Key spacing horizontal
+  ky: cy          # Key spacing vertical
+  angle: 24       # Angle between halves
+  pinkie_stagger: cy + 5
+  pinkie_splay: 8
+  pinkie_spread: 1.052kx
+  ring_stagger: 5
+
+  # Constants
+  xiao_x: 18
+  xiao_y: 22.5
+  pcm12_x: 8.8
+  pcm12_y: 4.55
+  jstph_x: 5.9
+  jstph_y: 7.6
+  visual_x: 1     # Visual representation of keycaps horizontal
+  visual_y: 1     # Visual representation of keycaps vertical
+  sf: 16          # Switch footprint (square)
+
+points:
+  zones.matrix:
+    rotate: -angle + pinkie_splay
+    mirror: &mirror
+      ref: matrix_inner_top
+      distance: 42
+    key: &key
+      width: capx
+      height: capy
+      tags:
+        keys: true
+        1u: true
+      footprints:
+        choc_hotswap:
+          type: choc
+          anchor:
+            rotate: 180
+          nets:
+            from: =row_net
+            to: =column_net
+          params:
+            keycaps: true
+            hotswap: true
+        diode:
+          type: diode
+          anchor:
+            shift: [0, 4.7]
+            rotate: 180
+          nets:
+            from: =column_net
+            to: =column_net
+        via:
+          type: via
+          anchor:
+            shift: [-8.25, 4.7]
+          nets:
+            net: =column_net
+      mirror:
+        footprints:
+          choc_hotswap:
+            type: choc
+          diode:
+            type: diode
+          via:
+            type: via
+            anchor:
+              shift: [8.25, 4.7]
+    rows:
+      bottom.padding: ky
+      home.padding: ky
+      top.padding: ky
+    columns.pinkie:
+      spread: kx
+      rows:
+        bottom.skip: true
+        home:
+          bind: [1.25, 30, 1.25, 1.75]
+          row_net: P9
+          column_net: P4
+        top:
+          bind: [1.25, 6, 4, 1.75]
+          row_net: P10
+          column_net: P4
+        home.mirror:
+          row_net: P6
+          column_net: P4
+        top.mirror:
+          row_net: P5
+          column_net: P4
+    columns.ring:
+      spread: pinkie_spread
+      stagger: pinkie_stagger
+      rotate: -pinkie_splay
+      rows:
+        bottom:
+          bind: [1.25, 1.75, 1.25, 1.75]
+          row_net: P8
+          column_net: P3
+        home:
+          bind: [1.25, 1.75, 1.25, 1.75]
+          row_net: P9
+          column_net: P3
+        top:
+          bind: [1.25, 1.75, 1.25, 1.75]
+          row_net: P10
+          column_net: P3
+        bottom.mirror:
+          row_net: P7
+          column_net: P3
+        home.mirror:
+          row_net: P6
+          column_net: P3
+        top.mirror:
+          row_net: P5
+          column_net: P3
+    columns.middle:
+      spread: kx
+      stagger: ring_stagger
+      rows:
+        bottom:
+          bind: [1.25, 1.75, 6.25, 1.75]
+          row_net: P8
+          column_net: P2
+        home:
+          bind: [1.25, 1.75, 1.25, 1.75]
+          row_net: P9
+          column_net: P2
+        top:
+          bind: [1.25, 1.75, 1.25, 1.75]
+          row_net: P10
+          column_net: P2
+        bottom.mirror:
+          row_net: P7
+          column_net: P2
+        home.mirror:
+          row_net: P6
+          column_net: P2
+        top.mirror:
+          row_net: P5
+          column_net: P2
+    columns.index:
+      spread: kx
+      rows:
+        bottom:
+          bind: [1.25, 1.75, 2.5, 1.75]
+          row_net: P8
+          column_net: P1
+        home:
+          bind: [1.25, 1.75, 1.25, 1.75]
+          row_net: P9
+          column_net: P1
+        top:
+          bind: [1.25, 1.75, 1.25, 1.75]
+          row_net: P10
+          column_net: P1
+        bottom.mirror:
+          row_net: P7
+          column_net: P1
+        home.mirror:
+          row_net: P6
+          column_net: P1
+        top.mirror:
+          row_net: P5
+          column_net: P1
+    columns.inner:
+      spread: kx - 0.5
+      stagger: -0.5kx
+      row_overrides:
+        bottom.skip: true
+        home:
+          bind: [1.25, 1.75, 1.25, 1.75]
+          rotate: 90
+          padding: kx
+          row_net: P9
+          column_net: P0
+          tags:
+            matrix_inner: true
+        top:
+          bind: [1.25, 1.75, 1.25, 1.75]
+          rotate: 90
+          padding: kx
+          row_net: P10
+          column_net: P0
+          tags:
+            matrix_inner: true
+        home.mirror:
+          row_net: P6
+          column_net: P0
+        top.mirror:
+          row_net: P5
+          column_net: P0
+
+  zones.thumb:
+    anchor:
+      ref: matrix_index_bottom
+      shift: [-.25kx, -ky - 2.5]
+    mirror: *mirror
+    key: *key
+    columns:
+      far:
+        key:
+          name: thumb_far
+          bind: [1.25, 5.25, 1.25, 6.25]
+          row_net: P8
+          column_net: P4
+          tags:
+            15u: true
+            1u: false
+        key.mirror:
+          row_net: P7
+          column_net: P4
+      home:
+        spread: 1.25kx - 0.5
+        stagger: 0.25kx + 0.5
+        key:
+          name: thumb_home
+          bind: [1.25, 5.25, 1.25, 6.25]
+          rotate: 90
+          row_net: P8
+          column_net: P0
+          tags:
+            15u: true
+            1u: false
+        key.mirror:
+          row_net: P7
+          column_net: P0
+
+  zones.mcu:
+    anchor:
+      ref: [matrix_index_top, mirror_matrix_index_top]
+      shift: [0, 0.25kx - 0.5xiao_y + 0.05]
+    key:
+      name: mcu
+      footprints:
+      - type: xiao
+        anchor:
+          shift: [0, -6.75]
+          rotate: -90
+  zones.jstph:
+    anchor:
+      ref: mcu
+      shift: [-0.5xiao_x + 0.5jstph_x - 1.75, -0.5xiao_y - 0.5jstph_y + 0.5]
+    key:
+      name: jstph
+      footprints:
+      - type: jstph
+        anchor:
+          shift: [0.25, 0]
+          rotate: 90
+        nets:
+          pos: pos
+          neg: neg
+  zones.pcm12:
+    anchor:
+      ref: mcu
+      shift: [-15.25, 0.5xiao_y - 0.5jstph_x + 0.8]
+    key:
+      name: pcm12
+      footprints:
+      - type: pcm12
+        anchor:
+          shift: [0, 0]
+          rotate: 180
+        nets:
+          from: neg
+          to: neg
+  zones.bat:
+    anchor:
+      ref: mcu
+      shift: [-15.25 + 0.5jstph_y, 3.4]
+    key:
+      name: bat
+      footprints:
+      - type: bat
+        anchor:
+          shift: [0, 0]
+          rotate: 180
+        nets:
+          pos: pos
+          neg: neg
+  zones.battery:
+    anchor:
+      ref: mcu
+      shift: [0, 0]
+    key:
+      name: battery
+
+  zones.mount_bl:
+    anchor:
+      ref: matrix_index_bottom
+      shift: [30, 0]
+    key:
+      name: mount_bl
+  zones.mount_tl:
+    anchor:
+      ref: matrix_inner_top
+      shift: [12, 0]
+    key:
+      name: mount_tl
+  zones.mount_br:
+    anchor:
+      ref: mirror_matrix_index_bottom
+      shift: [30, 0]
+    key:
+      name: mount_br
+  zones.mount_tr:
+    anchor:
+      ref: mirror_matrix_inner_top
+      shift: [12, 0]
+    key:
+      name: mount_tr
+
+outlines:
+  exports:
+    _keycap_outlines:
+      - type: keys
+        side: both
+        size: [capx, capy]
+        bound: false
+        tags: [1u]
+    _keycap_outlines15:
+      - type: keys
+        side: both
+        size: [1.5cx - 0.5, capy]
+        bound: false
+        tags: [15u]
+
+    _halves:
+      - type: keys
+        side: left
+        size: sf
+        tags: [keys]
+      - type: keys
+        side: right
+        size: sf
+        tags: [keys]
+    _centre:
+      - type: polygon
+        points:
+        - ref: matrix_index_top
+          shift: [0.25kx, 0.25ky + 2.75]
+        - ref: mirror_matrix_index_top
+          shift: [0.25kx, 0.25ky + 2.75]
+        - ref: mirror_thumb_home
+          shift: [-0.5kx, 1.2ky]
+        - ref: thumb_home
+          shift: [-0.5kx, 1.2ky]
+    _centre':
+      - type: polygon
+        points:
+        - ref: matrix_index_top
+          shift: [0.25kx, 0.25ky + 2.65]
+        - ref: mirror_matrix_index_top
+          shift: [0.25kx, 0.25ky + 2.65]
+        - ref: mirror_thumb_home
+          shift: [-0.5kx, 1.2ky]
+        - ref: thumb_home
+          shift: [-0.5kx, 1.2ky]
+
+    _mcu:
+      - type: rectangle
+        anchor:
+          ref: mcu
+          shift: [-0.5xiao_x, -0.5xiao_y]
+        size: [xiao_x, xiao_y]
+    _jstph:
+      - type: rectangle
+        anchor:
+          ref: jstph
+          shift: [-0.5jstph_y + 2.5, 0.5jstph_x - 0.5]
+          rotate: -90
+        size: [jstph_x, jstph_y]
+    _pcm12:
+      - type: rectangle
+        anchor:
+          ref: pcm12
+          shift: [0.5pcm12_x, 0.5pcm12_y - 0.25]
+          rotate: 180
+        size: [pcm12_x, pcm12_y]
+    _bat:
+      - type: circle
+        anchor:
+          ref: bat
+          shift: [0, 0.75]
+        radius: 0.5
+      - type: circle
+        anchor:
+          ref: bat
+          shift: [0, -0.75]
+        radius: 0.5
+    _battery:
+      - type: rectangle
+        anchor:
+          ref: battery
+          shift: [-15.5, -41.5]
+        size: [31, 20.5]
+
+    _mount_bl:
+      - type: circle
+        anchor:
+          ref: mount_bl
+          shift: [0, 0]
+        radius: 0.1
+    _mount_tl:
+      - type: circle
+        anchor:
+          ref: mount_tl
+          shift: [0, 0]
+        radius: 0.1
+    _mount_br:
+      - type: circle
+        anchor:
+          ref: mount_br
+          shift: [0, 0]
+        radius: 0.1
+    _mount_tr:
+      - type: circle
+        anchor:
+          ref: mount_tr
+          shift: [0, 0]
+        radius: 0.1
+
+    _spacer_bl:
+      - type: circle
+        anchor:
+          ref: mount_bl
+          shift: [0, 0]
+        radius: 2.2
+    _spacer_tl:
+      - type: circle
+        anchor:
+          ref: mount_tl
+          shift: [0, 0]
+        radius: 2.2
+    _spacer_br:
+      - type: circle
+        anchor:
+          ref: mount_br
+          shift: [0, 0]
+        radius: 2.2
+    _spacer_tr:
+      - type: circle
+        anchor:
+          ref: mount_tr
+          shift: [0, 0]
+        radius: 2.2
+
+    _hole_bl:
+      - type: circle
+        anchor:
+          ref: mount_bl
+          shift: [0, 0]
+        radius: 1
+    _hole_tl:
+      - type: circle
+        anchor:
+          ref: mount_tl
+          shift: [0, 0]
+        radius: 1
+    _hole_br:
+      - type: circle
+        anchor:
+          ref: mount_br
+          shift: [0, 0]
+        radius: 1
+    _hole_tr:
+      - type: circle
+        anchor:
+          ref: mount_tr
+          shift: [0, 0]
+        radius: 1
+
+    panel:
+      - _centre
+      - _halves
+    _middle:
+      - _centre'
+      - -_halves
+    _cover:
+      - name: _middle
+        fillet: 2
+    board:
+      - name: panel
+        fillet: 2
+      - ^_mount_bl
+      - ^_mount_tl
+      - ^_mount_br
+      - ^_mount_tr
+    cover:
+      - name: _cover
+      - ^_spacer_bl
+      - ^_spacer_tl
+      - ^_spacer_br
+      - ^_spacer_tr
+      - ^_hole_bl
+      - ^_hole_tl
+      - ^_hole_br
+      - ^_hole_tr
+    preview:
+      - board
+      - operation: subtract
+        name: _keycap_outlines
+        fillet: 1
+      - operation: subtract
+        name: _keycap_outlines15
+        fillet: 1
+      - ^_mcu
+      - ^_pcm12
+      - ^_jstph
+      - ^_bat
+      - ^_battery
+      - ^_mount_bl
+      - ^_mount_tl
+      - ^_mount_br
+      - ^_mount_tr
+      - ^cover
+
+pcbs:
+  capricorn:
+    outlines:
+      main:
+        outline: board
+
+cases:
+  battery_cover:
+    - type: outline
+      name: _cover
+      extrude: -1
+    - type: outline
+      name: _spacer_bl
+      extrude: 8
+    - type: outline
+      name: _spacer_tl
+      extrude: 8
+    - type: outline
+      name: _spacer_br
+      extrude: 8
+    - type: outline
+      name: _spacer_tr
+      extrude: 8
+    - type: outline
+      name: _hole_bl
+      extrude: 8
+      operation: subtract
+    - type: outline
+      name: _hole_tl
+      extrude: 8
+      operation: subtract
+    - type: outline
+      name: _hole_br
+      extrude: 8
+      operation: subtract
+    - type: outline
+      name: _hole_tr
+      extrude: 8
+      operation: subtract
+  pcb_outline:
+    - type: outline
+      name: panel
+      extrude: 1.6
